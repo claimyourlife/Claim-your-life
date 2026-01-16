@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Life | Ultimate Habit Tracker & Discipline Builder</title>
+    <meta name="description" content="Build unbreakable habits with our Google Sheet tracker. Track progress, monitor mood, and achieve your goals. Start transforming your discipline today.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0fce7c;
+            --accent-light: #2dffb2;
+            --text: #333333;
+            --text-light: #666666;
+            --light: #f8f9fa;
+            --gray: #e9ecef;
+            --border: #dee2e6;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(15, 206, 124, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(15, 206, 124, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--primary);
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--secondary);
+            box-shadow: 0 8px 25px rgba(26, 26, 46, 0.3);
+        }
+        
+        /* Header / Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%230fce7c" opacity="0.1"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-container {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .logo-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            border-top: 4px solid var(--accent);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Preview Section */
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .preview-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .preview-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .preview-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .preview-content ul {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .preview-content li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .preview-content li i {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        /* Screenshots */
+        .screenshots {
+            background: var(--gray);
+        }
+        
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .screenshot-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .screenshot-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .screenshot-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .screenshot-content {
+            padding: 25px;
+        }
+        
+        .screenshot-content h4 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        /* Pricing */
+        .pricing-card {
+            background: white;
+            border-radius: 16px;
+            padding: 50px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: 20px;
+            right: -50px;
+            background: #ff4757;
+            color: white;
+            padding: 8px 50px;
+            transform: rotate(45deg);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        
+        .price span {
+            font-size: 1.5rem;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .pricing-features {
+            text-align: left;
+            margin: 30px 0;
+            padding-left: 20px;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pricing-features li i {
+            color: var(--accent);
+        }
+        
+        /* Instagram Offer */
+        .instagram-offer {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .instagram-offer h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .instagram-offer .btn {
+            background: white;
+            color: #E1306C;
+            margin-top: 20px;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        /* Email Signup */
+        .email-signup {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .email-signup h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .email-form {
+            max-width: 500px;
+            margin: 30px auto 0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .email-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .email-form button {
+            padding: 15px 30px;
+        }
+        
+        /* FAQ */
+        .faq {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            background: white;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 300px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links h4 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+            
+            .hero {
+                padding: 80px 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .price {
+                font-size: 2.8rem;
+            }
+            
+            .pricing-card {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .btn {
+                padding: 14px 25px;
+                font-size: 0.95rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="logo">CLAIM YOUR LIFE</div>
+                    <div class="logo-subtitle">Ultimate Habit Tracker & Discipline Builder</div>
+                </div>
+                
+                <div class="hero-badge">
+                    <i class="fas fa-bolt"></i> NEW YEAR, NOT A NEW YOU. START NOW!
+                </div>
+                
+                <h1>Build Unbreakable Habits</h1>
+                <p>Transform your discipline with our premium Google Sheet tracker. Track habits, monitor progress, and achieve your goals. Your personal blueprint for success.</p>
+                
+                <a href="#pricing" class="btn">
+                    <i class="fas fa-rocket"></i> Get Your Tracker - Only £3.99
+                </a>
+                
+                <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                    <i class="fas fa-shield-alt"></i> Secure PayPal Payment • Instant Delivery • Lifetime Access
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need to Build Discipline</h2>
+                <p>Our Google Sheet tracker combines simplicity with powerful tracking features</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Comprehensive Habit Tracking</h3>
+                    <p>Track up to 10+ habits daily with visual progress indicators. See what's working and what needs improvement.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Mood & Motivation Monitoring</h3>
+                    <p>Log your daily mental state to identify patterns between your habits and how you feel.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Goal Progress Tracking</h3>
+                    <p>Set goals and track your progress automatically. Watch your completion rates grow over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>See What's Inside</h2>
+                <p>Your personal tracker includes everything shown here and more</p>
+            </div>
+            
+            <div class="preview-container">
+                <div class="preview-images">
+                    <div class="preview-image">
+                        <!-- Yearly Statistics Screenshot -->
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Yearly Statistics Dashboard">
+                    </div>
+                    <div class="preview-image">
+                        <!-- Monthly Tracker Screenshot -->
+                        <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Monthly Habit Tracker">
+                    </div>
+                </div>
+                
+                <div class="preview-content">
+                    <h3>Complete Tracking System</h3>
+                    <p>Your personal copy includes:</p>
+                    
+                    <ul>
+                        <li><i class="fas fa-check"></i> <strong>10+ Pre-loaded Habit Templates</strong> - Get up early, gym, reading, clean eating, and more</li>
+                        <li><i class="fas fa-check"></i> <strong>Monthly & Yearly Views</strong> - Track progress across entire year</li>
+                        <li><i class="fas fa-check"></i> <strong>Automatic Progress Calculation</strong> - See percentages and completion rates</li>
+                        <li><i class="fas fa-check"></i> <strong>Fully Customizable</strong> - Change habits, colors, add your own routines</li>
+                        <li><i class="fas fa-check"></i> <strong>Works Everywhere</strong> - Google Sheets on desktop & mobile</li>
+                        <li><i class="fas fa-check"></i> <strong>Lifetime Access</strong> - One payment, use forever</li>
+                    </ul>
+                    
+                    <a href="#pricing" class="btn btn-secondary" style="margin-top: 20px;">
+                        <i class="fas fa-download"></i> Get Your Copy Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" style="background: var(--gray);">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Get started in minutes with our simple 3-step process</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Purchase & Receive</h3>
+                    <p>Complete your purchase via PayPal and instantly receive your personal Google Sheet copy via email.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Customize</h3>
+                    <p>Open your copy and customize habits to match your goals. Change emojis, add new habits, make it yours.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Track Daily</h3>
+                    <p>Check off habits daily, log your mood, and watch your progress grow. Takes just 2 minutes per day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get Your Personal Tracker</h2>
+                <p>One-time payment. Lifetime access. Start transforming your discipline today.</p>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-badge">70% OFF</div>
+                
+                <h3>Claim Your Life Premium Tracker</h3>
+                <p style="color: var(--text-light); margin: 15px 0;">Complete habit & discipline tracking system</p>
+                
+                <div class="price">
+                    <span>£</span>3.99 <span class="original-price">£12.99</span>
+                </div>
+                
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Personal editable Google Sheet copy</li>
+                    <li><i class="fas fa-check"></i> 10+ pre-loaded habit templates</li>
+                    <li><i class="fas fa-check"></i> Mood & motivation tracking</li>
+                    <li><i class="fas fa-check"></i> Yearly statistics dashboard</li>
+                    <li><i class="fas fa-check"></i> Automatic progress calculation</li>
+                    <li><i class="fas fa-check"></i> Works on all devices</li>
+                    <li><i class="fas fa-check"></i> Lifetime access & updates</li>
+                </ul>
+                
+                <!-- PayPal Button -->
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="claimyourlife26@gmail.com">
+                    <input type="hidden" name="item_name" value="Claim Your Life Premium Habit Tracker">
+                    <input type="hidden" name="amount" value="3.99">
+                    <input type="hidden" name="currency_code" value="GBP">
+                    <input type="hidden" name="return" value="https://yourwebsite.com/thank-you">
+                    <input type="hidden" name="notify_url" value="https://yourwebsite.com/ipn">
+                    <button type="submit" class="btn">
+                        <i class="fab fa-paypal"></i> Buy Now with PayPal - £3.99
+                    </button>
+                </form>
+                
+                <p style="margin-top: 20px; font-size: 0.9rem; color: var(--text-light);">
+                    <i class="fas fa-lock"></i> Secure checkout • 
+                    <i class="fas fa-envelope"></i> Instant email delivery • 
+                    <i class="fas fa-infinity"></i> Lifetime access
+                </p>
+            </div>
+            
+            <!-- Instagram Offer -->
+            <div class="instagram-offer">
+                <h3><i class="fab fa-instagram"></i> Exclusive Instagram Offer</h3>
+                <p>Follow <strong>@claimyourlife26</strong> on Instagram and send us a DM to receive an exclusive discount code!</p>
+                <p>Get additional savings when you follow and message us. Limited time offer!</p>
+                <a href="https://instagram.com/claimyourlife26" target="_blank" class="btn">
+                    <i class="fab fa-instagram"></i> Visit Our Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email Signup -->
+    <section class="email-signup">
+        <div class="container">
+            <h2>Get Motivation Delivered</h2>
+            <p>Sign up for our email list to receive discipline tips, motivational messages, and exclusive offers.</p>
+            
+            <form class="email-form" id="emailForm">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i> Sign Up
+                </button>
+            </form>
+            
+            <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                We'll send you motivational messages to help build your discipline. No spam, unsubscribe anytime.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know before getting started</p>
+            </div>
+            
+            <div class="faq">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I get my tracker after purchase?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        You'll receive an automated email from <strong>claimyourlife26@gmail.com</strong> within minutes with your personal editable Google Sheet copy. Please check your spam folder if you don't see it immediately.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is this a subscription or one-time payment?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        One-time payment only! No subscriptions. You get lifetime access to your personal copy. Pay once, use forever.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I edit and customize the tracker?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! It's YOUR personal copy. You can change habits, colors, add new trackers, modify emojis - customize it however you want. It's designed to be fully personalized.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Do I need Google Sheets experience?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Not at all! It's designed to be super simple. Just click to check off your daily habits. Everything else calculates automatically. Setup takes about 2 minutes.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What if I have problems or questions?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Email us at <strong>claimyourlife26@gmail.com</strong> with any questions or issues. We're here to help you get the most out of your tracker.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Why choose this over habit tracking apps?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Unlike apps with subscriptions, this is a one-time purchase. It's fully customizable, works offline, and you own your data. Plus, Google Sheets works on every device without needing to download another app.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section" style="padding: 60px 0; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">There Is No Tomorrow</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Start building your discipline today. Your future self will thank you.
+            </p>
+            <a href="#pricing" class="btn" style="font-size: 1.1rem; padding: 18px 40px;">
+                <i class="fas fa-bolt"></i> Claim Your Life Now - £3.99
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>CLAIM YOUR LIFE</h3>
+                    <p>Building discipline through consistent habit tracking.</p>
+                    <p style="margin-top: 15px;">
+                        <i class="fas fa-envelope"></i> claimyourlife26@gmail.com
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#preview">Preview</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://instagram.com/claimyourlife26" target="_blank">Instagram</a></li>
+                        <li><a href="mailto:claimyourlife26@gmail.com
